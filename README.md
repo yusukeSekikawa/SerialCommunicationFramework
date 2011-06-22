@@ -5,10 +5,11 @@ SerialCommunication.framework
 
 NOTE
 =======
-Please set the following configuration.
-+In your project setting,set architecture to armv7.(override)
-+In your project setting,turn Thumb instruction to Off
-+Add Accelerate.framework
+You need to jailbreak your iOS device.
+http://blog.iphone-dev.org/
+<br>
+Change permission /dev/tty.iap to add user read access.
+
 
 HP
 =======
