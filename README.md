@@ -10,20 +10,30 @@ Using this framework and method Arduino can power from iOS devices.
 
 Setting Up H/W
 =======
-See [iPhone Pinout] and,connect TX,RX,GND,5V(optional)<br>
+See [iPhone Pinout] and,connect TX,RX,GND,5V(optional) with Arduino<br>
+Note that use 5V version of Arduino when connecting with iOS devieces.<br>
+You can use this(http://www.sparkfun.com/products/633) or this(http://www.sparkfun.com/products/8295) <br>
 For more info about H/W setup check [iPhone Serial Port Tutorial]<br>
 
 
 Setting Up iOS
 =======
-To use this framework you need to add read access for USER to /dev/tty.iap<br>
-You can use iFile from Cydia or any other application to change permission.<br>
-You need to jailbreak your iOS device.<br>
-For more info about Jailbreak visit [Dev-Team]<br>
+1.jailbreak your iOS device.<br>
+More info about Jailbreak visit [Dev-Team]<br>
+2.Add read,and execute to everyone for /dev/tty.iap<br>
+3.Download this Project and open SerialCommunicationFramework/SerialCommunicationSkeleton/SerialCommunicationSkeleton.xcodeproj<br> 
+4.Buil and Run.<br>
+5.Connect Arduino.<br>
+For more info about this frame work see source code in Project files.<br>
 
+Update Plan
+=======
+In update I want to add direct socket access feature from remote device in same network.
+I commented out draft code in "SerialCommunication.m",someone please implement this feature.
 
-<br>
-Change permission /dev/tty.iap to add user read access.
+Reference
+=======
+http://hcgilje.wordpress.com/2010/02/15/iphone-serial-communication/<br>
 
 
 HP
