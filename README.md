@@ -10,8 +10,7 @@ Using this framework and method Arduino can power from iOS devices.
 
 Setting Up H/W
 =======
-http://pinouts.ru/Devices/ipod_pinout.shtml<br>
-Connect TX,RX,GND,5V(optional)<br>
+See [iPhone Pinout] and,connect TX,RX,GND,5V(optional)<br>
 For more info about H/W setup check [iPhone Serial Port Tutorial]<br>
 
 
@@ -53,4 +52,5 @@ BSD License.
 [BSD License]: http://www.opensource.org/licenses/bsd-license.php
 [facebook]: http://www.facebook.com/yusuke.sekikawa
 [twitter]: http://twitter.com/#!/YusukeSekikawa
-[iPhone Serial Port Tutorial] :http://devdot.wikispaces.com/Iphone+Serial+Port+Tutorial
+[iPhone Pinout]: http://pinouts.ru/Devices/ipod_pinout.shtml
+[iPhone Serial Port Tutorial]: http://devdot.wikispaces.com/Iphone+Serial+Port+Tutorial
