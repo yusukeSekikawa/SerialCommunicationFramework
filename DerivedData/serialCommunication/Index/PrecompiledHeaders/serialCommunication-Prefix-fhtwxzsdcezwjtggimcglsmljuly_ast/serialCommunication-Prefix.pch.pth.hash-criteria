@@ -1,0 +1,27 @@
+Contents of /Users/sekikawayusuke/Dropbox/Dev/serialCommunication/serialInput/serialCommunication-Prefix.pch
+2.0 (tags/Apple/clang-139) (based on LLVM 2.9svn)
+-x
+c
+-arch
+armv6
+-fmessage-length=0
+-fdiagnostics-print-source-range-info
+-fdiagnostics-show-category=id
+-fdiagnostics-parseable-fixits
+-std=gnu99
+-fpascal-strings
+-O0
+-DDEBUG
+-isysroot
+/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk
+-gdwarf-2
+-mthumb
+-miphoneos-version-min=4.3
+-iquote
+-iquote
+-I/Users/sekikawayusuke/Dropbox/Dev/serialCommunication/DerivedData/serialCommunication/Build/Products/Debug-iphoneos/include
+-F/Users/sekikawayusuke/Dropbox/Dev/serialCommunication/DerivedData/serialCommunication/Build/Products/Debug-iphoneos
+-ferror-limit=10
+-working-directory=/Users/sekikawayusuke/Dropbox/Dev/serialCommunication
+-Xclang
+-detailed-preprocessing-record

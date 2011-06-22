@@ -1,0 +1,21 @@
+Contents of /Users/sekikawayusuke/Dropbox/Dev/serialCommunication/serialInput/serialCommunication-Prefix.pch
+4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2373.6)
+-x
+objective-c
+-arch
+armv7
+-fmessage-length=0
+-pipe
+-std=gnu99
+-fpascal-strings
+-O0
+-DDEBUG
+-isysroot
+/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk
+-gdwarf-2
+-mthumb
+-miphoneos-version-min=4.3
+-iquote
+-iquote
+-I/Users/sekikawayusuke/Dropbox/Dev/serialCommunication/DerivedData/serialCommunication/Build/Products/Debug-iphoneos/include
+-F/Users/sekikawayusuke/Dropbox/Dev/serialCommunication/DerivedData/serialCommunication/Build/Products/Debug-iphoneos
