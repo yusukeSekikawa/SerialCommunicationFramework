@@ -14,7 +14,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EB72C66113694CB30044490D"
-               BuildableName = "libserialInput.a"
+               BuildableName = "libserialCommunication.a"
                BlueprintName = "serialCommunication"
                ReferencedContainer = "container:serialCommunication.xcodeproj">
             </BuildableReference>
