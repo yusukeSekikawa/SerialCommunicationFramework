@@ -13,6 +13,7 @@ XCodeを使ってビルド＆実行できる環境で簡単にArduinoと通信�
 iOS版のAndroid ADKみたいな感じの環境ができればなと思って開発しています。<br>
 ADKより、いい点は、USBじゃなくてUARTなので通信がシンプルなのの、デバイスから電源をもらえるので（限度はありますが、、）構成がシンプルになる点です。<br>
 
+![](http://blog-imgs-42.fc2.com/v/a/n/vanishlab/201106232358095ce.png)
 
 Setting Up H/W
 =======
