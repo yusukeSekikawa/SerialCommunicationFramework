@@ -2,11 +2,17 @@
 
 FEATURE
 =======
-You can communicate Arduino with iOS easily.
+You can easily control Arduino using iOS devices.
 You can build and Run using Xcode as you create normal project.<br>
 This is iOS version of Android NDK.<br>
 (This framework use UART,Android ADK uses USB)<br>
 Using this framework and method Arduino can power from iOS devices.
+
+(JP)<br>
+XCodeを使ってビルド＆実行できる環境で簡単に、Arduinoと通信するアプリを開発できます。<br>
+iOS版のAndroid ADKみたいな感じの環境ができればなと思って開発しています。<br>
+ADKより、いい点は、USBじゃなくてUARTなので通信がシンプルなのの、デバイスから電源をもらえるので（限度はありますが、、）構成がシンプルになる点です。<br>
+
 
 Setting Up H/W
 =======
