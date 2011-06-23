@@ -9,7 +9,7 @@ This is iOS version of Android NDK.<br>
 Using this framework and method Arduino can power from iOS devices.
 
 (JP)<br>
-XCodeを使ってビルド＆実行できる環境で簡単に、Arduinoと通信するアプリを開発できます。<br>
+XCodeを使ってビルド＆実行できる環境で簡単にArduinoと通信するアプリを開発できます。<br>
 iOS版のAndroid ADKみたいな感じの環境ができればなと思って開発しています。<br>
 ADKより、いい点は、USBじゃなくてUARTなので通信がシンプルなのの、デバイスから電源をもらえるので（限度はありますが、、）構成がシンプルになる点です。<br>
 
@@ -21,6 +21,11 @@ Note that use 5V version of Arduino when connecting with iOS devieces.<br>
 You can use this(http://www.sparkfun.com/products/633) or this(http://www.sparkfun.com/products/8295) <br>
 For more info about H/W setup check [iPhone Serial Port Tutorial]<br>
 
+(JP)<br>
+[iPhone Pinout] を参考にして、TX,RX,GND,5V(optional) をArduinoと接続してください。<br>
+電源をデバイスから取りたい場合には、5V品のArduinoを使ってください。.<br>
+DockConnectorとの接続には、秋葉原とかで売っているこんなのhttp://cowoco.net/2011/01/dock30pinn.htmlを使うか、手持ちのを分解してもOKです。 <br>
+DocKコネクタの詳細については [iPhone Serial Port Tutorial]を参考にしてください。<br>
 
 Setting Up iOS
 =======
@@ -31,6 +36,13 @@ More info about Jailbreak visit [Dev-Team]<br>
 4.Buil and Run.<br>
 5.Connect Arduino.<br>
 For more info about this frame work see source code in Project files.<br>
+
+(JP)<br>
+1.デバイスをJailbreakします。<br>
+2./dev/tty.iapにユーザの実行・リード権限を付加します。（CydiaにあるiFileを使うと簡単です）<br>
+3.このプロジェクトをダウンロードし、SerialCommunicationFramework/SerialCommunicationSkeleton/SerialCommunicationSkeleton.xcodeproj　を開きます。<br> 
+4.Buil and Run.<br>
+5.上で作成したケーブルを介してArduinoを接続すれば動くはずです。<br>
 
 Update Plan
 =======
