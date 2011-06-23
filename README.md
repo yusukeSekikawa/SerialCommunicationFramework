@@ -24,8 +24,10 @@ For more info about H/W setup check [iPhone Serial Port Tutorial]<br>
 (JP)<br>
 [iPhone Pinout] を参考にして、TX,RX,GND,5V(optional) をArduinoと接続してください。<br>
 電源をデバイスから取りたい場合には、5V品のArduinoを使ってください。.<br>
-DockConnectorとの接続には、秋葉原とかで売っているこんなのhttp://cowoco.net/2011/01/dock30pinn.htmlを使うか、手持ちのを分解してもOKです。 <br>
+DockConnectorとの接続には、秋葉原とかで売っている工作用のを使うか、手持ちのいらないケーブルを分解してもOKです。 <br>
 DocKコネクタの詳細については [iPhone Serial Port Tutorial]を参考にしてください。<br>
+Arduinoに、付属のファームウェアを転送してください。<br>
+サンプルコードは、arduinoの3番ピンとGNDの間にスイッチを、9番ピンとGNDの間にLEDをつないで動作するようにしています。<br>
 
 Setting Up iOS
 =======
@@ -39,7 +41,7 @@ For more info about this frame work see source code in Project files.<br>
 
 (JP)<br>
 1.デバイスをJailbreakします。<br>
-2./dev/tty.iapにユーザの実行・リード権限を付加します。（CydiaにあるiFileを使うと簡単です）<br>
+2./dev/tty.iapにユーザのExecuteとRead権限を付加します。（CydiaにあるiFileを使うと簡単です）<br>
 3.このプロジェクトをダウンロードし、SerialCommunicationFramework/SerialCommunicationSkeleton/SerialCommunicationSkeleton.xcodeproj　を開きます。<br> 
 4.Buil and Run.<br>
 5.上で作成したケーブルを介してArduinoを接続すれば動くはずです。<br>
