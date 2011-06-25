@@ -1,5 +1,4 @@
 ![](http://vanishlab.web.fc2.com/vanishlab/OSS_files/chip.png)
-
 FEATURE
 =======
 You can easily control Arduino using iOS devices.
@@ -8,26 +7,29 @@ This is iOS version of Android NDK.<br>
 (This framework use UART,Android ADK uses USB)<br>
 Using this framework and method Arduino can power from iOS devices.
 
-(JP)<br>
+[JP]<br>
 XCodeを使ってビルド＆実行できる環境で簡単にArduinoと通信するアプリを開発できます。<br>
 iOS版のAndroid ADKみたいな感じの環境ができればなと思って開発しています。<br>
-ADKより、いい点は、USBじゃなくてUARTなので通信がシンプルなのの、デバイスから電源をもらえるので（限度はありますが、、）構成がシンプルになる点です。<br>
+ADKより、いい点は、USBじゃなくてUARTなので通信がシンプルなのと、デバイスから電源をもらえるので（限度はありますが、、）構成がシンプルになる点です。<br>
 
+![](http://blog-imgs-42.fc2.com/v/a/n/vanishlab/201106232358095ce.png)
 
 Setting Up H/W
 =======
 See [iPhone Pinout] and,connect TX,RX,GND,5V(optional) with Arduino<br>
-Note that use 5V version of Arduino when connecting with iOS devieces.<br>
+Note that use 3.3V version of Arduino when connecting with iOS devieces.<br>
 You can use this(http://www.sparkfun.com/products/633) or this(http://www.sparkfun.com/products/8295) <br>
-For more info about H/W setup check [iPhone Serial Port Tutorial]<br>
+For more info about iOS Serial port check [iPhone Serial Port Tutorial]<br>
+You can easily build development boards with the help of the sample code in yourself,or you can build your favorite,or you can even use " Android Open Accessory compatible development boards" and connect to iOS with TX,RX and GND. 
 
-(JP)<br>
+[JP]<br>
 [iPhone Pinout] を参考にして、TX,RX,GND,5V(optional) をArduinoと接続してください。<br>
-電源をデバイスから取りたい場合には、5V品のArduinoを使ってください。.<br>
+電源をデバイスから取りたい場合には、3.3V品のArduinoを使ってください。.<br>
 DockConnectorとの接続には、秋葉原とかで売っている工作用のを使うか、手持ちのいらないケーブルを分解してもOKです。 <br>
-DocKコネクタの詳細については [iPhone Serial Port Tutorial]を参考にしてください。<br>
-Arduinoに、付属のファームウェアを転送してください。<br>
-サンプルコードは、arduinoの3番ピンとGNDの間にスイッチを、9番ピンとGNDの間にLEDをつないで動作するようにしています。<br>
+DocKコネクタを経由したシリアル通信について、詳しく知りたい方は[iPhone Serial Port Tutorial]を参考にしてください。<br>
+/Arduino(iOS ADK sample)/iOS_ADKArduino/iOS_ADK.pde を開いて、付属のファームウェアを転送してください。<br>
+サンプルコードに対応したdevelopment boardsは上記コードを参考に簡単に組み立てることもできますし、ちょっと高いですがAndroid-ADKを購入し、シリアル端子を付けてもOKです。<br>
+
 
 Setting Up iOS
 =======
@@ -39,12 +41,20 @@ More info about Jailbreak visit [Dev-Team]<br>
 5.Connect Arduino.<br>
 For more info about this frame work see source code in Project files.<br>
 
-(JP)<br>
+[JP]<br>
 1.デバイスをJailbreakします。<br>
 2./dev/tty.iapにユーザのExecuteとRead権限を付加します。（CydiaにあるiFileを使うと簡単です）<br>
 3.このプロジェクトをダウンロードし、SerialCommunicationFramework/SerialCommunicationSkeleton/SerialCommunicationSkeleton.xcodeproj　を開きます。<br> 
 4.Buil and Run.<br>
 5.上で作成したケーブルを介してArduinoを接続すれば動くはずです。<br>
+
+Limitations
+=======
+
+[JP]<br>
+0xffを同期用の信号として使用しているため、現在、iOS->Arduinoにおくる値として、0xffが使用できません。<br>
+将来的には、現在の4Byteパケットの構成はかえないまま0xffを使用可能になるように修正する予定です。
+
 
 Update Plan
 =======
@@ -75,6 +85,11 @@ Acknowledgement
 License
 =======
 BSD License.
+
+Gallery
+=======
+BSD License.
+![](http://blog-imgs-42.fc2.com/v/a/n/vanishlab/20110625121707c2a.jpg)
 
 
 [Dev-Team]: http://blog.iphone-dev.org/
