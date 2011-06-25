@@ -203,11 +203,12 @@
         [NSThread detachNewThreadSelector:@selector(readSerialData) toTarget:self withObject:nil];
         [self serialAlert:@"Open Serial Port Success!"];
         NSLog(@"Open Serial Port Success!");
+        return [super init];
     }else{
         [self serialAlert:@"Open Serial Port Failed!"];
         NSLog(@"Open Serial Port Failed!");
+        return nil;
     }
-    return [super init];
 }
 
 - (void)dealloc {
