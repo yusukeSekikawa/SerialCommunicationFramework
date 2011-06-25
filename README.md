@@ -1,6 +1,4 @@
 ![](http://vanishlab.web.fc2.com/vanishlab/OSS_files/chip.png)
-![](http://blog-imgs-42.fc2.com/v/a/n/vanishlab/20110625121707c2a.jpg)
-
 FEATURE
 =======
 You can easily control Arduino using iOS devices.
@@ -87,6 +85,11 @@ Acknowledgement
 License
 =======
 BSD License.
+
+Gallery
+=======
+BSD License.
+![](http://blog-imgs-42.fc2.com/v/a/n/vanishlab/20110625121707c2a.jpg)
 
 
 [Dev-Team]: http://blog.iphone-dev.org/
