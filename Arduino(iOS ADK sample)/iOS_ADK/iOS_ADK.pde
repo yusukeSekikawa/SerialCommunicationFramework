@@ -43,6 +43,7 @@
 #define  LED2_BLUE      6
 
 #define  LED1_RED       8
+//#define  LED1_GREEN     18
 #define  LED1_GREEN     10
 #define  LED1_BLUE      9
 
@@ -56,13 +57,14 @@
 #define  LIGHT_SENSOR   16
 #define  TEMP_SENSOR    17
 
+//#define  BUTTON1        10
 #define  BUTTON1        18
 #define  BUTTON2        19
 #define  BUTTON3        20
 
 
 Servo servos[3];
-int len = 0;//byte recieved
+int len = -1;//byte recieved
 
 
 void setup();
@@ -152,11 +154,11 @@ void loop()
 	if (1) {
                 for(int i=0;i<4;i++){
                    int tmp = Serial.read();
-                   if(tmp==0xff){
+                   if(tmp==0xff && len==-1){
                      //sync bit
                      len=0;
                      msg[0]=tmp;
-                   }else if(tmp>=0x0 && len>-1){
+                   }else if(tmp>=0x0 && len!=-1){
                      len++;
                      msg[len]=tmp;
                    }
