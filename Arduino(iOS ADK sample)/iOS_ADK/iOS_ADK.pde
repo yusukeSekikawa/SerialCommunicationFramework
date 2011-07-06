@@ -29,10 +29,10 @@
  */
 
 
-
 #include <Wire.h>
 #include <Servo.h>
-
+#include <Max3421e.h>
+#include <CapSense.h>
 
 #define  LED3_RED       2
 #define  LED3_GREEN     4
@@ -51,19 +51,37 @@
 #define  SERVO2         12
 #define  SERVO3         13
 
+
+#if 0
+//Case Arduino Pro mini or something like that.
 #define  RELAY1         14
 #define  RELAY2         15
-
 #define  LIGHT_SENSOR   16
 #define  TEMP_SENSOR    17
-
-//#define  BUTTON1        10
 #define  BUTTON1        18
 #define  BUTTON2        19
 #define  BUTTON3        20
+#else
+//Case Arduino Mega,Android NDK or somethig like that.
+#define  TOUCH_RECV     14
+#define  TOUCH_SEND     15
+#define  RELAY1         A0
+#define  RELAY2         A1
+#define  LIGHT_SENSOR   A2
+#define  TEMP_SENSOR    A3
+#define  BUTTON1        A6
+#define  BUTTON2        A7
+#define  BUTTON3        A8
+#define  JOY_SWITCH     A9      // pulls line down when pressed
+#define  JOY_nINT       A10     // active low interrupt input
+#define  JOY_nRESET     A11     // active low reset output
+#endif
+
+
 
 
 Servo servos[3];
+CapSense   touch_robot = CapSense(TOUCH_SEND, TOUCH_RECV);
 int len = -1;//byte recieved
 
 
@@ -127,14 +145,16 @@ void setup()
 	init_leds();
 	init_relays();
 	init_buttons();
+	init_joystick( 5 );
 
+	touch_robot.set_CS_AutocaL_Millis(0xFFFFFFFF);
 
-	servos[1].attach(SERVO1);
+	servos[0].attach(SERVO1);
+	servos[0].write(90);
+	servos[1].attach(SERVO2);
 	servos[1].write(90);
-	servos[2].attach(SERVO2);
+	servos[2].attach(SERVO3);
 	servos[2].write(90);
-	servos[3].attach(SERVO3);
-	servos[3].write(90);
 
 
 	b1 = digitalRead(BUTTON1);
@@ -157,12 +177,12 @@ void loop()
                    if(tmp==0xff && len==-1){
                      //sync bit
                      len=0;
-                     msg[0]=tmp;
+                     msg[0]=0xff;
                    }else if(tmp>=0x0 && len!=-1){
                      len++;
                      msg[len]=tmp;
                    }
-                   if(len==4){
+                   if(len==3){
                      break;
                    }
                 }
@@ -172,7 +192,7 @@ void loop()
 		int x, y;
 		char c0;
 
-		if (len == 4) {
+		if (len == 3) {
                   len=-1;
 			// assumes only one command per packet
 			if (msg[1] == 0x2) {
@@ -195,11 +215,11 @@ void loop()
 				else if (msg[2] == 0x8)
 					analogWrite(LED3_BLUE, 255 - msg[3]);
 				else if (msg[2] == 0x10)
-					servos[1].write(map(msg[3], 0, 255, 0, 180));
+					servos[0].write(map(msg[3], 0, 255, 0, 180));
 				else if (msg[2] == 0x11)
-					servos[2].write(map(msg[3], 0, 255, 0, 180));
+					servos[1].write(map(msg[3], 0, 255, 0, 180));
 				else if (msg[2] == 0x12)
-					servos[3].write(map(msg[3], 0, 255, 0, 180));
+					servos[2].write(map(msg[3], 0, 255, 0, 180));
 			} else if (msg[1] == 0x3) {
 				if (msg[2] == 0x0)
 					digitalWrite(RELAY1, msg[3] ? HIGH : LOW);
@@ -215,7 +235,7 @@ void loop()
 		if (b != b1) {
 			msg[2] = 0;
 			msg[3] = b ? 0 : 1;
-			Serial.write(msg, 3);
+			Serial.write(msg, 4);
 			b1 = b;
 		}
 
@@ -223,7 +243,7 @@ void loop()
 		if (b != b2) {
 			msg[2] = 1;
 			msg[3] = b ? 0 : 1;
-			Serial.write(msg, 3);
+			Serial.write(msg, 4);
 			b2 = b;
 		}
 
@@ -231,8 +251,15 @@ void loop()
 		if (b != b3) {
 			msg[2] = 2;
 			msg[3] = b ? 0 : 1;
-			Serial.write(msg, 3);
+			Serial.write(msg, 4);
 			b3 = b;
+		}
+		b = digitalRead(JOY_SWITCH);
+		if (b != b4) {
+			msg[2] = 4;
+			msg[3] = b ? 0 : 1;
+			Serial.write(msg, 4);
+			b4 = b;
 		}
 
 
@@ -242,7 +269,7 @@ void loop()
 			msg[1] = 0x4;
 			msg[2] = val >> 8;
 			msg[3] = val & 0xff;
-			Serial.write(msg, 3);
+			Serial.write(msg, 4);
 			break;
 
 		case 0x4:
@@ -250,7 +277,15 @@ void loop()
 			msg[1] = 0x5;
 			msg[2] = val >> 8;
 			msg[3] = val & 0xff;
-			Serial.write(msg, 3);
+			Serial.write(msg, 4);
+			break;
+
+		case 0x8:
+			read_joystick(&x, &y);
+			msg[1] = 0x6;
+			msg[2] = constrain(x, -128, 127);
+			msg[3] = constrain(y, -128, 127);
+			Serial.write(msg, 4);
 			break;
 
 
@@ -261,7 +296,7 @@ void loop()
 				msg[1] = 0x1;
 				msg[2] = 3;
 				msg[3] = c0;
-				Serial.write(msg, 3);
+				Serial.write(msg, 4);
 				c = c0;
 			}
 
@@ -286,5 +321,115 @@ void loop()
 	}
 
 	delay(10);
+}
+// ==============================================================================
+// Austria Microsystems i2c Joystick
+void init_joystick(int threshold)
+{
+	byte status = 0;
+
+	pinMode(JOY_SWITCH, INPUT);
+	digitalWrite(JOY_SWITCH, HIGH);
+
+	pinMode(JOY_nINT, INPUT);
+	digitalWrite(JOY_nINT, HIGH);
+
+	pinMode(JOY_nRESET, OUTPUT);
+
+	digitalWrite(JOY_nRESET, 1);
+	delay(1);
+	digitalWrite(JOY_nRESET, 0);
+	delay(1);
+	digitalWrite(JOY_nRESET, 1);
+
+	Wire.begin();
+
+	do {
+		status = read_joy_reg(0x0f);
+	} while ((status & 0xf0) != 0xf0);
+
+	// invert magnet polarity setting, per datasheet
+	write_joy_reg(0x2e, 0x86);
+
+	calibrate_joystick(threshold);
+}
+
+
+int offset_X, offset_Y;
+
+void calibrate_joystick(int dz)
+{
+	char iii;
+	int x_cal = 0;
+	int y_cal = 0;
+
+	// Low Power Mode, 20ms auto wakeup
+	// INTn output enabled
+	// INTn active after each measurement
+	// Normal (non-Reset) mode
+	write_joy_reg(0x0f, 0x00);
+	delay(1);
+
+	// dummy read of Y_reg to reset interrupt
+	read_joy_reg(0x11);
+
+	for(iii = 0; iii != 16; iii++) {
+		while(!joystick_interrupt()) {}
+
+		x_cal += read_joy_reg(0x10);
+		y_cal += read_joy_reg(0x11);
+	}
+
+	// divide by 16 to get average
+	offset_X = -(x_cal>>4);
+	offset_Y = -(y_cal>>4);
+
+	write_joy_reg(0x12, dz - offset_X);  // Xp, LEFT threshold for INTn
+	write_joy_reg(0x13, -dz - offset_X);  // Xn, RIGHT threshold for INTn
+	write_joy_reg(0x14, dz - offset_Y);  // Yp, UP threshold for INTn
+	write_joy_reg(0x15, -dz - offset_Y);  // Yn, DOWN threshold for INTn
+
+	// dead zone threshold detect requested?
+	if (dz)
+		write_joy_reg(0x0f, 0x04);
+}
+
+
+void read_joystick(int *x, int *y)
+{
+	*x = read_joy_reg(0x10) + offset_X;
+	*y = read_joy_reg(0x11) + offset_Y;  // reading Y clears the interrupt
+}
+
+char joystick_interrupt()
+{
+	return digitalRead(JOY_nINT) == 0;
+}
+
+
+#define  JOY_I2C_ADDR    0x40
+
+char read_joy_reg(char reg_addr)
+{
+	char c;
+
+	Wire.beginTransmission(JOY_I2C_ADDR);
+	Wire.send(reg_addr);
+	Wire.endTransmission();
+
+	Wire.requestFrom(JOY_I2C_ADDR, 1);
+
+	while(Wire.available())
+		c = Wire.receive();
+
+	return c;
+}
+
+void write_joy_reg(char reg_addr, char val)
+{
+	Wire.beginTransmission(JOY_I2C_ADDR);
+	Wire.send(reg_addr);
+	Wire.send(val);
+	Wire.endTransmission();
 }
 

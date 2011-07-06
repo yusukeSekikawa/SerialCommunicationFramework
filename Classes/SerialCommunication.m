@@ -101,6 +101,7 @@
     [self.delegate serialAlert:msg];
 }
 -(int)sendSerialData:(uint32_t)data{
+    //NSLog(@"Sent %x",data);
     return write(serialFD,&data,sizeof(uint32_t));  // Write 32bit
 }
 -(void)readSerialData{
