@@ -16,14 +16,14 @@ ADKより、いい点は、USBじゃなくてUARTなので通信がシンプル�
 
 Setting Up H/W
 =======
-See [iPhone Pinout] and,connect TX,RX,GND,5V(optional) with Arduino<br>
+See [iPhone Pinout] and,connect TX,RX,GND,Vcc(optional) with Arduino<br>
 Note that use 3.3V version of Arduino when connecting with iOS devieces.<br>
 You can use this(http://www.sparkfun.com/products/633) or this(http://www.sparkfun.com/products/8295) <br>
 For more info about iOS Serial port check [iPhone Serial Port Tutorial]<br>
 You can easily build development boards with the help of the sample code in yourself,or you can build your favorite,or you can even use " Android Open Accessory compatible development boards" and connect to iOS with TX,RX and GND. 
 
 [JP]<br>
-[iPhone Pinout] を参考にして、TX,RX,GND,5V(optional) をArduinoと接続してください。<br>
+[iPhone Pinout] を参考にして、TX,RX,GND,Vcc(optional) をArduinoと接続してください。<br>
 電源をデバイスから取りたい場合には、3.3V品のArduinoを使ってください。.<br>
 DockConnectorとの接続には、秋葉原とかで売っている工作用のを使うか、手持ちのいらないケーブルを分解してもOKです。 <br>
 DocKコネクタを経由したシリアル通信について、詳しく知りたい方は[iPhone Serial Port Tutorial]を参考にしてください。<br>
