@@ -14,7 +14,7 @@
  * - Redistributions in binary form must reproduce the above copyright notice, this list
  *  of conditions and the following disclaimer in the documentation and/or other materia
  * ls provided with the distribution.
- * - Neither the name of the "Yuichi Yoshida" nor the names of its contributors may be u
+ * - Neither the name of the "Yusuke Sekikawa" nor the names of its contributors may be u
  * sed to endorse or promote products derived from this software without specific prior 
  * written permission.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY E
@@ -400,6 +400,41 @@ void read_joystick(int *x, int *y)
 	*x = read_joy_reg(0x10) + offset_X;
 	*y = read_joy_reg(0x11) + offset_Y;  // reading Y clears the interrupt
 }
+<<<<<<< HEAD
+=======
+
+char joystick_interrupt()
+{
+	return digitalRead(JOY_nINT) == 0;
+}
+
+
+#define  JOY_I2C_ADDR    0x40
+
+char read_joy_reg(char reg_addr)
+{
+	char c;
+
+	Wire.beginTransmission(JOY_I2C_ADDR);
+	Wire.send(reg_addr);
+	Wire.endTransmission();
+
+	Wire.requestFrom(JOY_I2C_ADDR, 1);
+
+	while(Wire.available())
+		c = Wire.receive();
+
+	return c;
+}
+
+void write_joy_reg(char reg_addr, char val)
+{
+	Wire.beginTransmission(JOY_I2C_ADDR);
+	Wire.send(reg_addr);
+	Wire.send(val);
+	Wire.endTransmission();
+}
+>>>>>>> Add remote access function.
 
 char joystick_interrupt()
 {

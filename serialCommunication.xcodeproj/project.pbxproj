@@ -10,6 +10,11 @@
 		EB1017AB13B1CF4E00BB1129 /* SerialCommunication.h in Headers */ = {isa = PBXBuildFile; fileRef = EB1017A913B1CF4E00BB1129 /* SerialCommunication.h */; };
 		EB1017AC13B1CF4E00BB1129 /* SerialCommunication.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1017AA13B1CF4E00BB1129 /* SerialCommunication.m */; };
 		EB10180513B1E27B00BB1129 /* serialCommunication-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = EB10180413B1E27B00BB1129 /* serialCommunication-Prefix.pch */; };
+		EB45FE4313CFDE83004CDAB5 /* AsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = EB45FE3F13CFDE83004CDAB5 /* AsyncSocket.h */; };
+		EB45FE4413CFDE83004CDAB5 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = EB45FE4013CFDE83004CDAB5 /* AsyncSocket.m */; };
+		EB45FE4513CFDE83004CDAB5 /* AsyncUdpSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = EB45FE4113CFDE83004CDAB5 /* AsyncUdpSocket.h */; };
+		EB45FE4613CFDE83004CDAB5 /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = EB45FE4213CFDE83004CDAB5 /* AsyncUdpSocket.m */; };
+		EB45FE4A13CFDFF5004CDAB5 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB45FE4913CFDFF5004CDAB5 /* CFNetwork.framework */; };
 		EB72C66613694CB30044490D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB72C66513694CB30044490D /* Foundation.framework */; };
 		EB72C6A113694E110044490D /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = EB72C69D13694E110044490D /* Makefile */; };
 		EB72C6A213694E110044490D /* serial.c in Sources */ = {isa = PBXBuildFile; fileRef = EB72C69F13694E110044490D /* serial.c */; };
@@ -21,6 +26,11 @@
 		EB1017AA13B1CF4E00BB1129 /* SerialCommunication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SerialCommunication.m; path = Classes/SerialCommunication.m; sourceTree = SOURCE_ROOT; };
 		EB1017C413B1DD1100BB1129 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		EB10180413B1E27B00BB1129 /* serialCommunication-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "serialCommunication-Prefix.pch"; sourceTree = "<group>"; };
+		EB45FE3F13CFDE83004CDAB5 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AsyncSocket.h; path = Classes/cocoaasyncsocket/AsyncSocket.h; sourceTree = SOURCE_ROOT; };
+		EB45FE4013CFDE83004CDAB5 /* AsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AsyncSocket.m; path = Classes/cocoaasyncsocket/AsyncSocket.m; sourceTree = SOURCE_ROOT; };
+		EB45FE4113CFDE83004CDAB5 /* AsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AsyncUdpSocket.h; path = Classes/cocoaasyncsocket/AsyncUdpSocket.h; sourceTree = SOURCE_ROOT; };
+		EB45FE4213CFDE83004CDAB5 /* AsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AsyncUdpSocket.m; path = Classes/cocoaasyncsocket/AsyncUdpSocket.m; sourceTree = SOURCE_ROOT; };
+		EB45FE4913CFDFF5004CDAB5 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		EB72C66213694CB30044490D /* libserialCommunication.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libserialCommunication.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB72C66513694CB30044490D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		EB72C67013694CB30044490D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -36,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB45FE4A13CFDFF5004CDAB5 /* CFNetwork.framework in Frameworks */,
 				EB72C66613694CB30044490D /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -50,6 +61,17 @@
 			);
 			name = Resources;
 			path = serialInput;
+			sourceTree = "<group>";
+		};
+		EB45FE4813CFDE90004CDAB5 /* cocoaasyncsocket */ = {
+			isa = PBXGroup;
+			children = (
+				EB45FE3F13CFDE83004CDAB5 /* AsyncSocket.h */,
+				EB45FE4013CFDE83004CDAB5 /* AsyncSocket.m */,
+				EB45FE4113CFDE83004CDAB5 /* AsyncUdpSocket.h */,
+				EB45FE4213CFDE83004CDAB5 /* AsyncUdpSocket.m */,
+			);
+			name = cocoaasyncsocket;
 			sourceTree = "<group>";
 		};
 		EB72C65713694CB20044490D = {
@@ -75,6 +97,7 @@
 		EB72C66413694CB30044490D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EB45FE4913CFDFF5004CDAB5 /* CFNetwork.framework */,
 				EB72C66513694CB30044490D /* Foundation.framework */,
 				EB72C67013694CB30044490D /* UIKit.framework */,
 				EB72C67313694CB30044490D /* CoreGraphics.framework */,
@@ -85,6 +108,7 @@
 		EB72C68E13694CDA0044490D /* classes */ = {
 			isa = PBXGroup;
 			children = (
+				EB45FE4813CFDE90004CDAB5 /* cocoaasyncsocket */,
 				EB1017A913B1CF4E00BB1129 /* SerialCommunication.h */,
 				EB1017AA13B1CF4E00BB1129 /* SerialCommunication.m */,
 			);
@@ -114,6 +138,8 @@
 				EB72C6A313694E110044490D /* serial.h in Headers */,
 				EB1017AB13B1CF4E00BB1129 /* SerialCommunication.h in Headers */,
 				EB10180513B1E27B00BB1129 /* serialCommunication-Prefix.pch in Headers */,
+				EB45FE4313CFDE83004CDAB5 /* AsyncSocket.h in Headers */,
+				EB45FE4513CFDE83004CDAB5 /* AsyncUdpSocket.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,6 +210,8 @@
 				EB72C6A113694E110044490D /* Makefile in Sources */,
 				EB72C6A213694E110044490D /* serial.c in Sources */,
 				EB1017AC13B1CF4E00BB1129 /* SerialCommunication.m in Sources */,
+				EB45FE4413CFDE83004CDAB5 /* AsyncSocket.m in Sources */,
+				EB45FE4613CFDE83004CDAB5 /* AsyncUdpSocket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

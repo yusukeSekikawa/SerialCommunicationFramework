@@ -14,7 +14,7 @@
  * - Redistributions in binary form must reproduce the above copyright notice, this list
  *  of conditions and the following disclaimer in the documentation and/or other materia
  * ls provided with the distribution.
- * - Neither the name of the "Yuichi Yoshida" nor the names of its contributors may be u
+ * - Neither the name of the "Yusuke Sekikawa" nor the names of its contributors may be u
  * sed to endorse or promote products derived from this software without specific prior 
  * written permission.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY E
@@ -33,23 +33,43 @@
 // http://devdot.wikispaces.com/Iphone+Serial+Port+Tutorial
 
 
-
-
-
 #import <Foundation/Foundation.h>
+
+#define TYPE_SERVER             0x01
+#define TYPE_CLIENT             0x02
+#define TYPE_LOCAL              0x03
+
+
+
+@class AsyncSocket;
 
 @protocol SerialCommunicationDelegate;
 
 @interface SerialCommunication : NSObject {
     id <SerialCommunicationDelegate> delegate;
     int     serialFD;
+    int     socketType;
+    BOOL    isServing;
+    
+    AsyncSocket *serialSocket;
+    NSMutableArray *connectedClients;
+    bool running;
 }
 @property (nonatomic, assign) id <SerialCommunicationDelegate> delegate;
--(BOOL)isDeviceConnected;
--(int)sendSerialData:(uint32_t)data;
+@property (readonly,getter=isRunning) bool running;
+- (id)initWithType:(uint8_t)type;
+- (void) startOnPort:(int)port;
+- (void) stop;
+- (BOOL)isDeviceConnected;
+- (int)sendSerialData:(uint32_t)data;
+- (void)normalConnectTo:(NSString*)host port:(int)port;
+- (NSString *) wanAddress;
+- (NSString *) wifiAddress;
 @end
 
 @protocol SerialCommunicationDelegate
 -(void)serialDataRecieved:(int)data;
 -(void)serialAlert:(NSString*)msg;
+-(void)disconnectedWithPeer;
+-(void)connectedWithPeer:(BOOL)result;
 @end

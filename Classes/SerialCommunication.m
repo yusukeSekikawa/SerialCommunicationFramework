@@ -14,7 +14,7 @@
  * - Redistributions in binary form must reproduce the above copyright notice, this list
  *  of conditions and the following disclaimer in the documentation and/or other materia
  * ls provided with the distribution.
- * - Neither the name of the "Yuichi Yoshida" nor the names of its contributors may be u
+ * - Neither the name of the "Yusuke Sekikawa" nor the names of its contributors may be u
  * sed to endorse or promote products derived from this software without specific prior 
  * written permission.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY E
@@ -37,8 +37,33 @@
 #include <unistd.h>
 #include <errno.h>
 
+#include <string.h>
+#include <fcntl.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#import <sys/socket.h>
+#import <netinet/in.h>
+#import <netinet6/in6.h>
+#import <arpa/inet.h>
+#import <ifaddrs.h>
+#import <netdb.h>
+
+
+
+#import "AsyncSocket.h"
+
+int WelcomeMsgTag=0;
+int GenericMsgTag=1;
+
+
 @implementation SerialCommunication
 @synthesize delegate;
+@synthesize running;
+
 -(BOOL)isDeviceConnected{
     return YES;
 }
@@ -96,13 +121,34 @@
 
 -(void)serialDataRecieved:(NSNumber*)uint32_tNum{
     [self.delegate serialDataRecieved:[uint32_tNum intValue]];
+
+    int serialData=[uint32_tNum unsignedIntValue];
+
+    if(self.running){
+        if(socketType==TYPE_SERVER){
+            [serialSocket writeData:[NSData dataWithBytes:&serialData length:sizeof(uint32_t)] withTimeout:-1 tag:GenericMsgTag];
+        }else{
+            ;
+        }
+    }
+
+    
 }
 -(void)serialAlert:(NSString*)msg{
     [self.delegate serialAlert:msg];
 }
 -(int)sendSerialData:(uint32_t)data{
     //NSLog(@"Sent %x",data);
+<<<<<<< HEAD
     return write(serialFD,&data,sizeof(uint32_t));  // Write 32bit
+=======
+    if(socketType==TYPE_SERVER){
+        return write(serialFD,&data,sizeof(uint32_t));  // Write 32bit
+    }else{
+        [serialSocket writeData:[NSData dataWithBytes:&data length:sizeof(uint32_t)] withTimeout:-1 tag:GenericMsgTag];
+        return 0;
+    }
+>>>>>>> Add remote access function.
 }
 -(void)readSerialData{
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
@@ -123,98 +169,280 @@
 }
 
 
-
-// TODO.
-//In future update,this framework provide socket access from remote devece.
-//
-//- (void) startServer
-//{
-//	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];	
-//	socklen_t length;
-//	static struct sockaddr_in cli_addr; 
-//	static struct sockaddr_in serv_addr;
-//	
-//	// Set up socket
-//	if((listenfd = socket(AF_INET, SOCK_STREAM,0)) <0)	
-//	{
-//		isServing = NO;
-//		[self performSelectorOnMainThread:@selector(addLog:) withObject:[NSString stringWithFormat:@"(1)"] waitUntilDone:NO];
-//
-//		return;
-//	}
-//	
-//	[self performSelectorOnMainThread:@selector(addLog:) withObject:[NSString stringWithFormat:@"(2)"] waitUntilDone:NO];
-//
-//    // Serve to a random port
-//	serv_addr.sin_family = AF_INET;
-//	serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-//	serv_addr.sin_port = 1234;
-//	
-//	// Bind
-//	if(bind(listenfd, (struct sockaddr *)&serv_addr,sizeof(serv_addr)) <0)	
-//	{
-//		[self performSelectorOnMainThread:@selector(addLog:) withObject:[NSString stringWithFormat:@"(3)"] waitUntilDone:NO];
-//
-//		isServing = NO;
-//		return;
-//	}
-//	[self performSelectorOnMainThread:@selector(addLog:) withObject:[NSString stringWithFormat:@"(4)"] waitUntilDone:NO];
-//
-//	
-//	// Find out what port number was chosen.
-//	int namelen = sizeof(serv_addr);
-//	if (getsockname(listenfd, (struct sockaddr *)&serv_addr, (void *) &namelen) < 0) {
-//		[self performSelectorOnMainThread:@selector(addLog:) withObject:[NSString stringWithFormat:@"(5)"] waitUntilDone:NO];
-//
-//		close(listenfd);
-//		isServing = NO;
-//		return;
-//	}
-//	// Listen
-//	if(listen(listenfd, 64) < 0)	
-//	{
-//		[self performSelectorOnMainThread:@selector(addLog:) withObject:[NSString stringWithFormat:@"(6)"] waitUntilDone:NO];
-//
-//		isServing = NO;
-//		return;
-//	} 
-//	
-//	[self performSelectorOnMainThread:@selector(addLog:) withObject:[NSString stringWithFormat:@"(7)"] waitUntilDone:NO];
-//
-//	
-//	length = sizeof(cli_addr);
-//	while (1) {
-//		if((socketfd = accept(listenfd, (struct sockaddr *)&cli_addr, &length)) < 0)
-//		{
-//			[self performSelectorOnMainThread:@selector(addLog:) withObject:[NSString stringWithFormat:@"(8)"] waitUntilDone:NO];
-//			
-//			isServing = NO;
-//			NSLog(@"accept failed");
-//			return;
-//		}else{
-//			[self performSelectorOnMainThread:@selector(addLog:) withObject:[NSString stringWithFormat:@"Connected With Client"] waitUntilDone:NO];
-//			isServing=YES;
-//		}
-//	}
-//	[pool release];
-//}
-- (id)init {
-    serialFD=[self openSerialPort];
-	if(serialFD>0){
-        [NSThread detachNewThreadSelector:@selector(readSerialData) toTarget:self withObject:nil];
-        [self serialAlert:@"Open Serial Port Success!"];
-        NSLog(@"Open Serial Port Success!");
-        return [super init];
-    }else{
-        [self serialAlert:@"Open Serial Port Failed!"];
-        NSLog(@"Open Serial Port Failed!");
-        return nil;
+// Return the iPhone's IP address
+- (NSString *) wifiAddress
+{
+	char baseHostName[255];
+	gethostname(baseHostName, 255);
+	
+	char hn[255];
+	sprintf(hn, "%s.local", baseHostName);
+	struct hostent *host = gethostbyname(hn);
+    if (host == NULL)
+	{
+        herror("resolv");
+		return NULL;
+	}
+    else {
+        struct in_addr **list = (struct in_addr **)host->h_addr_list;
+        NSString *wifiAddress=[NSString stringWithCString:inet_ntoa(*list[0]) encoding:NSASCIIStringEncoding];
+        if([wifiAddress isEqualToString:@"127.0.0.1"]){
+            return @"N/A";
+        }else{
+            return wifiAddress;
+        }
+        
+        //return [NSString stringWithFormat:@"<br /><i>or</i><br />http://%@:%d <hr /> http://%@:%d", [NSString stringWithCString:inet_ntoa(*list[0])], chosenPort,ThreeG_IP,chosenPort];
     }
+}
+- (NSString *) wanAddress
+{
+	struct ifaddrs * addrs, * ifloop; 
+	char buf[64];
+	struct sockaddr_in *s4;
+	NSString *wanAddress;
+	getifaddrs(&addrs);
+	for (ifloop = addrs; ifloop != NULL; ifloop = ifloop->ifa_next)
+	{
+		s4 = (struct sockaddr_in *)(ifloop->ifa_addr);
+		inet_ntop(ifloop->ifa_addr->sa_family, (void *)&(s4->sin_addr), buf, sizeof(buf)) == NULL;
+		const char * ifname = ifloop->ifa_name;
+		if (memcmp(ifname, "pdp_ip1", 7) == 1)
+		{
+			printf("******%s: %s*******\n", ifloop->ifa_name, buf);
+			wanAddress=[[NSString alloc] initWithUTF8String:buf];
+		}
+		printf("----%s: %s----\n", ifloop->ifa_name, buf);
+		//printf("%s: %s----\n", ifloop->ifa_addr, buf);
+	}
+    if([wanAddress isEqualToString:@"127.0.0.1"]){
+        return @"N/A";
+    }else{
+        return wanAddress;
+    }
+}
+//TODO.
+//In future update,this framework provide socket access from remote devece.
+
+-(void)addLog:(NSString*)str{
+    ;
+}
+
+- (id)initWithType:(uint8_t)type{
+    socketType=type;
+    if((self=[super init])){
+        if(type==TYPE_LOCAL || type==TYPE_SERVER){
+            serialFD=[self openSerialPort];
+            if(serialFD>0){
+                [NSThread detachNewThreadSelector:@selector(readSerialData) toTarget:self withObject:nil];
+                [self serialAlert:@"Open Serial Port Success!"];
+                running = false;       
+                if(type==TYPE_SERVER){
+                    NSLog(@"[TYPE_SERVER]Open Serial Port Success! Work As Remote Server");
+                    serialSocket = [[AsyncSocket alloc] initWithDelegate:self];
+                    connectedClients = [[NSMutableArray alloc] initWithCapacity:1];
+                }else{
+                    NSLog(@"[TYPE_LOCAL]Open Serial Port Success!");
+                }
+            }else{
+                [self serialAlert:@"Open Serial Port Failed!"];
+                NSLog(@"Open Serial Port Failed!");
+                [self release];
+                self = nil;
+            }
+        }else if(type==TYPE_CLIENT){
+            NSLog(@"Work As Remote Client");
+            serialSocket = [[AsyncSocket alloc] initWithDelegate:self];
+            connectedClients = [[NSMutableArray alloc] initWithCapacity:1];
+            running = false;
+        }else{
+            NSLog(@"Invalid Mode");
+            [self release];
+            self = nil;
+        }
+    }
+    return  self;
 }
 
 - (void)dealloc {
     close(serialFD);
     serialFD=-1;
+    
+    [self stop];
+    [connectedClients release];
+    [serialSocket release];
     [super dealloc];
 }
+
+
+#pragma Async Socket Delegate
+
+- (void) startOnPort:(int)port;
+{
+    if (running) return;
+    
+    if (port < 0 || port > 65535)
+        port = 0;
+    
+    NSError *error = nil;
+    if (![serialSocket acceptOnPort:port error:&error])
+        return;
+    
+    NSLog(@"My Awesome Serial Server has started on port %hu", [serialSocket localPort]);
+    
+    running = true;
+}
+
+
+- (void) stop;
+{
+    if (!running) return;
+    
+    [serialSocket disconnect];
+    for (AsyncSocket* socket in connectedClients)
+        [socket disconnect]; 
+    
+    running = false;
+}
+
+- (void)onSocket:(AsyncSocket *)socket didAcceptNewSocket:(AsyncSocket *)newSocket;
+{
+    [connectedClients addObject:newSocket];
+}
+
+
+- (void)onSocketDidDisconnect:(AsyncSocket *)socket;
+{
+    [connectedClients removeObject:socket];
+    [self.delegate disconnectedWithPeer];
+    NSLog(@"socketDidDisconnect:%p withError: %@", sock, err);
+
+}
+
+
+- (void)normalConnectTo:(NSString*)host port:(int)port
+{
+	NSError *error = nil;
+	
+	//NSString *host = @"google.com";
+    //	NSString *host = @"deusty.com";
+	NSLog(@"normalConnectTo %@:%d",host,port);
+	if (![serialSocket connectToHost:host onPort:port error:&error])
+	{
+		NSLog(@"Error connecting: %@", error);
+	}
+    
+	// You can also specify an optional connect timeout.
+	
+    //if (![serialSocket connectToHost:host onPort:9999 withTimeout:5.0 error:&error])
+    //{
+    //    NSLog(@"Error connecting: %@", error);
+    //}
+}
+- (void)onSocket:(AsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
+{
+    if(socketType==TYPE_SERVER){
+        [self.delegate connectedWithPeer:true];
+        NSLog(@"Accepted client %@:%hu", host, port);
+        
+//        NSData *welcomeData = [@"Welcome to my Awesome Debug Server\r\n" 
+//                               dataUsingEncoding:NSUTF8StringEncoding];
+//        [sock writeData:welcomeData withTimeout:-1 tag:WelcomeMsgTag];
+        
+        [sock readDataWithTimeout:-1 tag:GenericMsgTag];
+    }else{
+        [self.delegate connectedWithPeer:true];
+        [sock readDataWithTimeout:-1 tag:GenericMsgTag];
+
+        NSLog(@"socket:%p didConnectToHost:%@ port:%hu", sock, host, port);
+        
+        //	DDLogInfo(@"localHost :%@ port:%hu", [sock localHost], [sock localPort]);
+        
+        if (port == 443)//Secure Conneections
+        {
+            
+#if 0
+            // Backgrounding doesn't seem to be supported on the simulator yet
+            [sock performBlock:^{
+                if ([sock enableBackgroundingOnSocketWithCaveat])
+                    NSLog(@"Enabled backgrounding on socket");
+                else
+                    NSLog(@"Enabling backgrounding failed!");
+            }];
+            
+#endif
+            
+            // Configure SSL/TLS settings
+            NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithCapacity:3];
+            
+            // If you simply want to ensure that the remote host's certificate is valid,
+            // then you can use an empty dictionary.
+            
+            // If you know the name of the remote host, then you should specify the name here.
+            // 
+            // NOTE:
+            // You should understand the security implications if you do not specify the peer name.
+            // Please see the documentation for the startTLS method in GCDAsyncSocket.h for a full discussion.
+            
+            [settings setObject:@"www.paypal.com"
+                         forKey:(NSString *)kCFStreamSSLPeerName];
+            
+            // To connect to a test server, with a self-signed certificate, use settings similar to this:
+            
+            //	// Allow expired certificates
+            //	[settings setObject:[NSNumber numberWithBool:YES]
+            //				 forKey:(NSString *)kCFStreamSSLAllowsExpiredCertificates];
+            //	
+            //	// Allow self-signed certificates
+            //	[settings setObject:[NSNumber numberWithBool:YES]
+            //				 forKey:(NSString *)kCFStreamSSLAllowsAnyRoot];
+            //	
+            //	// In fact, don't even validate the certificate chain
+            //	[settings setObject:[NSNumber numberWithBool:NO]
+            //				 forKey:(NSString *)kCFStreamSSLValidatesCertificateChain];
+            
+            NSLog(@"Starting TLS with settings:\n%@", settings);
+            
+            [sock startTLS:settings];
+            
+            // You can also pass nil to the startTLS method, which is the same as passing an empty dictionary.
+            // Again, you should understand the security implications of doing so.
+            // Please see the documentation for the startTLS method in GCDAsyncSocket.h for a full discussion.
+        }
+    }
+}
+
+- (void)onSocket:(AsyncSocket *)socket didReadData:(NSData *)data withTag:(long)tag;
+{
+    int *serialData;
+    serialData=(int*)[data bytes];
+    
+    if(socketType==TYPE_SERVER){
+        NSLog(@"[TYPE_SERVER] Send Data over serial %x,%d",*serialData,[data length]);
+        write(serialFD,serialData,sizeof(uint32_t));  // Write 32bit
+    }else{
+        NSLog(@"[TYPE_CLIENT] Send Data APP %x,%d",*serialData,[data length]);
+        [self serialDataRecieved:[NSNumber numberWithUnsignedInt:*serialData]];
+    }
+    
+    NSString *tmp = [NSString stringWithUTF8String:[data bytes]];
+    NSString *input = [tmp stringByTrimmingCharactersInSet:
+                       [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    if ([input isEqualToString:@"exit"])
+    {
+        NSData *byeData = [@"Bye!\r\n" dataUsingEncoding:NSUTF8StringEncoding];
+        [socket writeData:byeData withTimeout:-1 tag:GenericMsgTag];
+        [socket disconnectAfterWriting];
+        return;
+    }
+    
+    [socket readDataWithTimeout:-1 tag:GenericMsgTag];
+}
+- (void)socketDidDisconnect:(AsyncSocket *)sock withError:(NSError *)err
+{
+    [self.delegate disconnectedWithPeer];
+	NSLog(@"socketDidDisconnect:%p withError: %@", sock, err);
+}
+
 @end
