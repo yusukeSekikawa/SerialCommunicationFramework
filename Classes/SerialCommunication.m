@@ -126,7 +126,14 @@ int GenericMsgTag=1;
 
     if(self.running){
         if(socketType==TYPE_SERVER){
+<<<<<<< HEAD
             [serialSocket writeData:[NSData dataWithBytes:&serialData length:sizeof(uint32_t)] withTimeout:-1 tag:GenericMsgTag];
+=======
+            for (AsyncSocket* socket in connectedClients){
+                //[socket disconnect]; 
+                [socket writeData:[NSData dataWithBytes:&serialData length:sizeof(uint32_t)] withTimeout:-1 tag:WelcomeMsgTag];
+            }
+>>>>>>> Add remote connection functions
         }else{
             ;
         }
@@ -137,18 +144,42 @@ int GenericMsgTag=1;
 -(void)serialAlert:(NSString*)msg{
     [self.delegate serialAlert:msg];
 }
+
 -(int)sendSerialData:(uint32_t)data{
     //NSLog(@"Sent %x",data);
+<<<<<<< HEAD
 <<<<<<< HEAD
     return write(serialFD,&data,sizeof(uint32_t));  // Write 32bit
 =======
     if(socketType==TYPE_SERVER){
         return write(serialFD,&data,sizeof(uint32_t));  // Write 32bit
+=======
+    //return write(serialFD,&data,sizeof(uint32_t));  // Write 32bit
+    if(socketType==TYPE_SERVER){
+        
+#if 0
+    //[sock writeData:welcomeData withTimeout:-1 tag:WelcomeMsgTag];
+
+    NSLog(@"sendSerialData TEST %X",data);
+        
+    for (AsyncSocket* socket in connectedClients){
+        //[socket disconnect]; 
+        [socket writeData:[NSData dataWithBytes:&data length:sizeof(uint32_t)] withTimeout:-1 tag:WelcomeMsgTag];
+    }
+        
+#endif
+        return write(serialFD,&data,sizeof(uint32_t));  // Write 32bit
+
+        
+>>>>>>> Add remote connection functions
     }else{
         [serialSocket writeData:[NSData dataWithBytes:&data length:sizeof(uint32_t)] withTimeout:-1 tag:GenericMsgTag];
         return 0;
     }
+<<<<<<< HEAD
 >>>>>>> Add remote access function.
+=======
+>>>>>>> Add remote connection functions
 }
 -(void)readSerialData{
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
@@ -315,7 +346,11 @@ int GenericMsgTag=1;
 {
     [connectedClients removeObject:socket];
     [self.delegate disconnectedWithPeer];
+<<<<<<< HEAD
     NSLog(@"socketDidDisconnect:%p withError: %@", sock, err);
+=======
+    //NSLog(@"socketDidDisconnect:%p withError: %@", sock, err);
+>>>>>>> Add remote connection functions
 
 }
 
@@ -323,6 +358,10 @@ int GenericMsgTag=1;
 - (void)normalConnectTo:(NSString*)host port:(int)port
 {
 	NSError *error = nil;
+<<<<<<< HEAD
+=======
+    running = true;       
+>>>>>>> Add remote connection functions
 	
 	//NSString *host = @"google.com";
     //	NSString *host = @"deusty.com";
@@ -345,13 +384,20 @@ int GenericMsgTag=1;
         [self.delegate connectedWithPeer:true];
         NSLog(@"Accepted client %@:%hu", host, port);
         
+<<<<<<< HEAD
 //        NSData *welcomeData = [@"Welcome to my Awesome Debug Server\r\n" 
 //                               dataUsingEncoding:NSUTF8StringEncoding];
 //        [sock writeData:welcomeData withTimeout:-1 tag:WelcomeMsgTag];
+=======
+        NSData *welcomeData = [@"Welcome to my Awesome Debug Server\r\n" 
+                               dataUsingEncoding:NSUTF8StringEncoding];
+        [sock writeData:welcomeData withTimeout:-1 tag:WelcomeMsgTag];
+>>>>>>> Add remote connection functions
         
         [sock readDataWithTimeout:-1 tag:GenericMsgTag];
     }else{
         [self.delegate connectedWithPeer:true];
+<<<<<<< HEAD
         [sock readDataWithTimeout:-1 tag:GenericMsgTag];
 
         NSLog(@"socket:%p didConnectToHost:%@ port:%hu", sock, host, port);
@@ -359,6 +405,19 @@ int GenericMsgTag=1;
         //	DDLogInfo(@"localHost :%@ port:%hu", [sock localHost], [sock localPort]);
         
         if (port == 443)//Secure Conneections
+=======
+        //[sock readDataWithTimeout:-1 tag:GenericMsgTag];
+
+
+        NSLog(@"socket:%p didConnectToHost():%@ port:%hu", sock, host, port);
+        [serialSocket readDataWithTimeout:-1 tag:GenericMsgTag];
+
+        //	DDLogInfo(@"localHost :%@ port:%hu", [sock localHost], [sock localPort]);
+        
+        
+        //if (port == 443)//Secure Conneections
+        if (0)//Secure Conneections
+>>>>>>> Add remote connection functions
         {
             
 #if 0
