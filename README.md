@@ -7,6 +7,11 @@ This is iOS version of Android NDK.<br>
 (This framework use UART,Android ADK uses USB)<br>
 Using this framework and method Arduino can power from iOS devices.
 
+[NEW]
+It also provide remote control over 3G or Wifi,that you can control Arduino in remotely.
+
+
+
 [JP]<br>
 XCodeを使ってビルド＆実行できる環境で簡単にArduinoと通信するアプリを開発できます。<br>
 iOS版のAndroid ADKみたいな感じの環境ができればなと思って開発しています。<br>
@@ -47,6 +52,33 @@ For more info about this frame work see source code in Project files.<br>
 3.このプロジェクトをダウンロードし、SerialCommunicationFramework/SerialCommunicationSkeleton/SerialCommunicationSkeleton.xcodeproj　を開きます。<br> 
 4.Buil and Run.<br>
 5.上で作成したケーブルを介してArduinoを接続すれば動くはずです。<br>
+
+
+How to use remote controll function with sample project,
+=======
+[Server]<br>
+1.Connect Arduino.<br>
+2.Home->Settings->ADK Select Server<br>
+3.Lunch App.<br>
+
+[Client]<br>
+1.Home->Settings->ADK Select Clinet<br>
+2.Lunch App.<br>
+3.Input IP Address shown in server side App and push connect.
+$.Background color turns black when successfully connected with server.(Server side also turns black)
+
+
+
+[JP]<br>
+1.Arduinoを接続します。.<br>
+2.Home->Settings->ADK でServerを選択します。<br>
+3.アプリケーションを起動します.<br>
+
+[Client]<br>
+1.Home->Settings->ADK でClinetを選択します。<br>
+2.アプリケーションを起動します.<br>
+3.Server側の画面に表示されているIPアドレスを入力してconnectを押します。
+$.正常に接続されると、背景が赤から黒に変わります。（サーバー側も同様に黒になります)
 
 Limitations
 =======
